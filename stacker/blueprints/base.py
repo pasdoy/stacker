@@ -339,18 +339,6 @@ class Blueprint(object):
                 output[var_name] = cfn_attrs
         return output
 
-    def get_output_definitions(self):
-        """Gets the output definitions.
-
-        Returns:
-            dict: output definitions. Keys are output names, the values
-                are dicts containing key/values for various output
-                properties.
-
-        """
-        return {k: output.to_dict() for k, output in
-                self.template.outputs.items()}
-
     def get_required_parameter_definitions(self):
         """Returns all template parameters that do not have a default value.
 
