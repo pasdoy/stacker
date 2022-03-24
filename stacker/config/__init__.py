@@ -158,7 +158,7 @@ def substitute_references(root, environment, exp, full_exp):
     # We need to check for something being a string in both python 2.7 and
     # 3+. The aliases in the future package don't work for yaml sourced
     # strings, so we have to spin our own.
-    def isstr(s):
+    def is_str(s):
         try:
             return isinstance(s, basestring)
         except NameError:
@@ -173,9 +173,10 @@ def substitute_references(root, environment, exp, full_exp):
         result = {}
         for k, v in root.items():
             new_k = substitute_references(k, environment, exp, full_exp)
-            result[new_k] = substitute_references(v, environment, exp, full_exp)
+            new_v = substitute_references(v, environment, exp, full_exp)
+            result[new_k] = new_v
         return result
-    elif isstr(root):
+    elif is_str(root):
         # Strings are the special type where all substitutions happen. If we
         # encounter a string object in the expression tree, we need to perform
         # one of two different kinds of matches on it. First, if the entire
@@ -195,7 +196,7 @@ def substitute_references(root, environment, exp, full_exp):
         # Returns if an object is a basic type. Once again, the future package
         # overrides don't work for string here, so we have to special case it
         def is_basic_type(o):
-            if isstr(o):
+            if is_str(o):
                 return True
             basic_types = [int, bool, float]
             for t in basic_types:

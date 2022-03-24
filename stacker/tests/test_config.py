@@ -72,8 +72,14 @@ class TestConfig(unittest.TestCase):
             multiple: ${str_1}-${str_2}
             dont_match_this: ${output something}
             key_dict:
-                ${namespace}: foo
+                ${namespace}-blah: foo
+                ${namespace}: bar
         """
+        # conf = """
+        #  key_dict:
+        #         ${namespace}-blah: foo
+        #         ${namespace}: bar
+        # """
         env = """
             namespace: test
             env_list: &listAnchor
@@ -114,7 +120,7 @@ class TestConfig(unittest.TestCase):
         self.assertEquals(pc['substr'], 'prefix-another str-suffix')
         self.assertEquals(pc['multiple'], 'another str-hello')
         self.assertEquals(pc['dont_match_this'], '${output something}')
-        self.assertEquals(pc['key_dict']["test"], 'foo')
+        self.assertEquals(pc['key_dict'], {'test-blah': 'foo', 'test': 'bar'})
 
     def test_render_yaml_errors(self):
         # We shouldn't be able to substitute an object into a string
